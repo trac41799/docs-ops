@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "date": "2026-10-10T15:41:03Z",
+    "skill_dir": "C:\\Users\\TracNguyen\\.agents\\skills\\docs-ops",
+    "provider": "claude",
+    "runs_per_scenario": 1
+  },
+  "results": [
+    {
+      "scenario": "api-change-routing",
+      "run": 1,
+      "passed": true,
+      "missing_required": [],
+      "forbidden_found": [],
+      "answer_chars": 4059
+    },
+    {
+      "scenario": "scaffold-command",
+      "run": 1,
+      "passed": true,
+      "missing_required": [],
+      "forbidden_found": [],
+      "answer_chars": 3956
+    },
+    {
+      "scenario": "rfc-keyword-scope",
+      "run": 1,
+      "passed": true,
+      "missing_required": [],
+      "forbidden_found": [],
+      "answer_chars": 1760
+    },
+    {
+      "scenario": "generated-layers",
+      "run": 1,
+      "passed": true,
+      "missing_required": [],
+      "forbidden_found": [],
+      "answer_chars": 3410
+    },
+    {
+      "scenario": "epic-lifecycle",
+      "run": 1,
+      "passed": true,
+      "missing_required": [],
+      "forbidden_found": [],
+      "answer_chars": 3886
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-10
+
+### Fixed
+- Checker glob matching is version-portable: pruned explicit walks replace
+  trailing-`**` pathlib globs (Python 3.12 CI emptied allowlists silently).
+- Monorepo scan performance: md walks prune `.venv`/`node_modules`/`.git`/
+  hidden dirs — tripcomposer scan went from >120s timeout to ~9s.
+- Propagate excludes `.pytest_cache` and `.gitattributes` from harness copies.
+- Metrics rename `new_adrs_in_window` → `adr_touches_in_window`: the counter
+  includes edits and renames of existing ADRs, not just creations.
+
+### Added
+- First navigation-eval run archived under `evals/runs/` (5/5 pass, claude).
+
 ## [0.1.0] - 2026-10-10
 
 ### Added
