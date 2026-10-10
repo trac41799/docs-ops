@@ -190,7 +190,8 @@ def collect_process(root: Path, budgets: dict, window_days: int) -> dict:
     plans = sorted(plans_dir.glob("*.md")) if plans_dir.is_dir() else []
     deferred_ok = sum(1 for s in specs if re.search(r"\bDeferred\b", s.read_text(encoding="utf-8-sig", errors="replace")))
     new_adr_log = git(root, "log", f"--since={since}", "--name-only", "--pretty=format:%H", "--", "docs/decisions")
-    new_adrs = len({l for l in new_adr_log.splitlines() if l.startswith("ADR-") or l.endswith(".md") and "decisions" in l})
+    # "touched", not "created" — the log includes edits and renames of existing ADRs
+    adr_touches = len({l for l in new_adr_log.splitlines() if l.endswith(".md")})
 
     return {
         "git": True,
@@ -200,7 +201,7 @@ def collect_process(root: Path, budgets: dict, window_days: int) -> dict:
         "changelog_coverage_pct": round(coverage, 1) if coverage is not None else None,
         "uncovered_subjects": [c[0] for c in eligible if c not in covered][:10],
         "adr_count": len(adrs),
-        "new_adrs_in_window": new_adrs,
+        "adr_touches_in_window": adr_touches,
         "spec_count": len(specs),
         "plan_count": len(plans),
         "specs_with_deferred": deferred_ok,
@@ -322,7 +323,7 @@ def main() -> int:
         cov = process["changelog_coverage_pct"]
         print(f"  process   : changelog coverage {cov if cov is not None else 'n/a'}% "
               f"({process['changelog_covered']}/{process['behavior_commits']} behavior commits, "
-              f"{window}d window); ADRs {process['adr_count']} (+{process['new_adrs_in_window']}); "
+              f"{window}d window); ADRs {process['adr_count']} ({process['adr_touches_in_window']} touched); "
               f"specs {process['spec_count']} deferred-table {process['specs_with_deferred']}/{process['specs_total']}; "
               f"plans {process['plan_count']}")
     else:
