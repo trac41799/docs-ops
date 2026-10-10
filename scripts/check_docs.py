@@ -74,10 +74,31 @@ def strip_code(text: str) -> list[str]:
 
 
 def md_files(root: Path, globs: list[str]) -> set[Path]:
+    """Collect .md files for config globs.
+
+    Trailing-`**` semantics changed across Python versions (3.12 vs 3.13+
+    pathlib differ), which silently emptied allowlists on older CI images.
+    Handle the config's real patterns explicitly instead of relying on
+    version-specific `glob("**")` behavior.
+    """
     found: set[Path] = set()
     for g in globs:
+        g = g.replace("\\", "/")
         try:
-            found.update(p for p in root.glob(g) if p.is_file() and p.suffix == ".md")
+            if g.endswith("/**"):
+                base = root / g[: -len("/**")]
+                if base.is_dir():
+                    found.update(p for p in base.rglob("*.md") if p.is_file())
+            elif g.endswith("/*.md"):
+                base = root / g[: -len("/*.md")]
+                if base.is_dir():
+                    found.update(p for p in base.glob("*.md") if p.is_file())
+            elif "*" not in g and "?" not in g:
+                p = root / g
+                if p.is_file() and p.suffix == ".md":
+                    found.add(p)
+            else:
+                found.update(p for p in root.glob(g) if p.is_file() and p.suffix == ".md")
         except ValueError:
             print(f"warn: bad glob {g!r}", file=sys.stderr)
     return found
