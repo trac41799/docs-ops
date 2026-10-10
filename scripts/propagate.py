@@ -80,7 +80,8 @@ def main() -> int:
                 src,
                 dest,
                 ignore=shutil.ignore_patterns(
-                    ".git", ".github", ".gitignore", "tests", "metrics", "evals"
+                    ".git", ".github", ".gitignore", ".gitattributes",
+                    ".pytest_cache", "__pycache__", "tests", "metrics", "evals",
                 ),
             )
             print(f"OK    {dest}")
