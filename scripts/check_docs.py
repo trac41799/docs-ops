@@ -89,7 +89,8 @@ def md_files(root: Path, globs: list[str]) -> set[Path]:
                 base = root / g[: -len("/**")]
                 if base.is_dir():
                     found.update(p for p in base.rglob("*.md") if p.is_file())
-            elif g.endswith("/*.md"):
+            elif g.endswith("/*.md") and "**" not in g:
+                # bare dir/*.md — do NOT catch "**/*.md" (root/** is not a dir)
                 base = root / g[: -len("/*.md")]
                 if base.is_dir():
                     found.update(p for p in base.glob("*.md") if p.is_file())
