@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test deps
+        run: pip install pytest
+      - name: Unit tests (scaffold, checker, collector)
+        run: pytest -q
+      - name: Smoke — scaffold + strict check + collect on a fresh fixture
+        run: |
+          python scripts/scaffold_docs.py "$RUNNER_TEMP/fixture" --project Smoke
+          python scripts/check_docs.py --strict --root "$RUNNER_TEMP/fixture"
+          python scripts/collect_metrics.py --root "$RUNNER_TEMP/fixture" --out "$RUNNER_TEMP/runs" --no-git

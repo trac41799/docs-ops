@@ -1,0 +1,32 @@
+[
+  {
+    "id": "api-change-routing",
+    "prompt": "In a repo that follows this skill's conventions, a merge changes a public API endpoint's request schema. List every documentation artifact that must be updated in that merge request, and for each say which skill file defines the requirement.",
+    "required_substrings": ["changelog", "references/rules.md"],
+    "forbidden_substrings": []
+  },
+  {
+    "id": "scaffold-command",
+    "prompt": "A brand-new empty repository needs the standard docs structure. State the exact command to run, where the script lives, what categories of files it creates, what guarantee it gives about existing files, and how you verify the result is clean.",
+    "required_substrings": ["scaffold_docs.py", "check_docs.py"],
+    "forbidden_substrings": []
+  },
+  {
+    "id": "rfc-keyword-scope",
+    "prompt": "Where may uppercase RFC 2119 keywords (MUST, SHOULD, MAY) appear in project docs, and where must they not? What happens to lowercase 'must' on an allowlisted page? Cite the skill file that defines the rule.",
+    "required_substrings": ["allowlist", "references/rules.md"],
+    "forbidden_substrings": []
+  },
+  {
+    "id": "generated-layers",
+    "prompt": "A diagram PNG under a generated directory in the docs is out of date. What do you edit, what do you regenerate, and what must you never edit? Cite the skill file that defines the rule.",
+    "required_substrings": ["regenerat", "references/rules.md"],
+    "forbidden_substrings": []
+  },
+  {
+    "id": "epic-lifecycle",
+    "prompt": "An epic is approved and implementation has not started. In order, list the documentation artifacts that must exist before the first implementation merge, and cite the skill files that require them.",
+    "required_substrings": ["references/rules.md", "references/patterns.md"],
+    "forbidden_substrings": []
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "max_prose_errors": 0,
+  "max_broken_links": 0,
+  "min_changelog_coverage_pct": 80.0,
+  "max_structure_missing": 0,
+  "code_globs": ["backend/**", "frontend/**", "src/**", "app/**", "lib/**", "api/**"],
+  "changelog_paths": [
+    "docs/changes/CHANGELOG.md",
+    "changes/CHANGELOG.md",
+    "CHANGELOG.md"
+  ],
+  "window_days": 30
+}
