@@ -17,9 +17,19 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
+
+# recursive walks must prune vendor dirs — a monorepo's .venv/node_modules
+# otherwise turns a docs scan into a full-tree crawl (measured: >120s on
+# tripcomposer before pruning; <2s after)
+EXCLUDE_DIRS = {
+    ".git", ".venv", "venv", "node_modules", "__pycache__", ".next",
+    "dist", "build", ".pytest_cache", ".mypy_cache", ".ruff_cache",
+    ".tox", ".eggs", ".eggs", "site-packages",
+}
 
 DEFAULT_CONFIG = {
     # templates and CONTRIBUTING quote the keywords as instructions, so they
@@ -73,22 +83,36 @@ def strip_code(text: str) -> list[str]:
     return out
 
 
+def _walk_md(base: Path) -> set[Path]:
+    """Recursive .md walk that prunes vendor and hidden directories."""
+    out: set[Path] = set()
+    for dirpath, dirnames, filenames in os.walk(base):
+        dirnames[:] = [
+            d for d in dirnames if d not in EXCLUDE_DIRS and not d.startswith(".")
+        ]
+        for fn in filenames:
+            if fn.endswith(".md"):
+                out.add(Path(dirpath) / fn)
+    return out
+
+
 def md_files(root: Path, globs: list[str]) -> set[Path]:
     """Collect .md files for config globs.
 
     Trailing-`**` semantics changed across Python versions (3.12 vs 3.13+
     pathlib differ), which silently emptied allowlists on older CI images.
-    Handle the config's real patterns explicitly instead of relying on
-    version-specific `glob("**")` behavior.
+    Handle the config's real patterns explicitly with pruned walks.
     """
     found: set[Path] = set()
     for g in globs:
         g = g.replace("\\", "/")
         try:
-            if g.endswith("/**"):
-                base = root / g[: -len("/**")]
+            if g.endswith("/**") or g == "**" or g.startswith("**/"):
+                # "docs/specs/**" -> walk docs/specs; "**/*.md" -> walk root
+                prefix = g[: -len("/**")] if g.endswith("/**") else ""
+                base = root / prefix if prefix else root
                 if base.is_dir():
-                    found.update(p for p in base.rglob("*.md") if p.is_file())
+                    found.update(_walk_md(base))
             elif g.endswith("/*.md") and "**" not in g:
                 # bare dir/*.md — do NOT catch "**/*.md" (root/** is not a dir)
                 base = root / g[: -len("/*.md")]
@@ -99,7 +123,7 @@ def md_files(root: Path, globs: list[str]) -> set[Path]:
                 if p.is_file() and p.suffix == ".md":
                     found.add(p)
             else:
-                found.update(p for p in root.glob(g) if p.is_file() and p.suffix == ".md")
+                found.update(_walk_md(root))
         except ValueError:
             print(f"warn: bad glob {g!r}", file=sys.stderr)
     return found

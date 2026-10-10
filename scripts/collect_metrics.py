@@ -25,6 +25,7 @@ import argparse
 import datetime as dt
 import fnmatch
 import json
+import os
 import re
 import subprocess
 import sys
@@ -34,6 +35,13 @@ SCRIPTS = Path(__file__).resolve().parent
 ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
 MD_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 COUNTS_RE = re.compile(r"(\d+) errors, (\d+) warnings")
+
+# same pruning as check_docs.py — a monorepo walk without this exceeds 120s
+EXCLUDE_DIRS = {
+    ".git", ".venv", "venv", "node_modules", "__pycache__", ".next",
+    "dist", "build", ".pytest_cache", ".mypy_cache", ".ruff_cache",
+    ".tox", ".eggs", "site-packages",
+}
 
 DEFAULT_BUDGETS = {
     "max_prose_errors": 0,
@@ -105,9 +113,13 @@ def collect_prose(root: Path) -> dict:
 def collect_links(root: Path) -> dict:
     checked = 0
     broken: list[str] = []
-    for f in root.rglob("*.md"):
-        if any(p.startswith(".") for p in f.relative_to(root).parts):
-            continue
+    md_files_list: list[Path] = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [
+            d for d in dirnames if d not in EXCLUDE_DIRS and not d.startswith(".")
+        ]
+        md_files_list.extend(Path(dirpath) / fn for fn in filenames if fn.endswith(".md"))
+    for f in md_files_list:
         text = f.read_text(encoding="utf-8-sig", errors="replace")
         for m in MD_LINK_RE.finditer(text):
             target = m.group(1).strip().strip("<>").split()[0] if m.group(1).strip() else ""
