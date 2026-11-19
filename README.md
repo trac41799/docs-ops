@@ -1,11 +1,9 @@
 # docs-ops
 
-One skill that scaffolds, governs, and **measures** an SDLC-aligned `docs/`
-tree — so documentation stops rotting and the claim "our docs are healthy"
-becomes a number, not a vibe.
+A documentation skill for a small starting structure, audience-aware writing, and optional lifecycle checks.
 
-- **Structure** — SDD → planning → build → QA → review, one home per fact
-- **Standards** — STE-light prose rules, RFC 2119 keyword scope, BLUF
+- **Structure** — an index and writing guide by default; add areas when needed
+- **Writing** — ISO 24495-1 plain-language principles, an ASD-STE100 subset, and an audience-aware audit
 - **Enforcement** — stdlib checker (CI-safe), optional Vale, drift guards
 - **Measurement** — scored health reports with budgets + append-only trends
 - **Regression net** — agent-navigation evals that keep the skill usable
@@ -53,6 +51,8 @@ Tag releases (`v0.1.0`); the CHANGELOG is the release narrative.
 | Health report | `python scripts/collect_metrics.py --root <repo>` |
 | Agent evals (maintainers) | `python evals/run_evals.py` |
 
+The default scaffold creates only `docs/README.md` and `docs/standards/writing-guide.md`. Use `--full` to create the legacy tree and templates. Neither mode deletes existing files. The writing audit reports findings by default and rewrites only on request.
+
 Per-repo checker config: `docs-ops.json` at the repo root (RFC allowlist,
 procedure globs, sentence cap, banned synonyms). Health budgets:
 `metrics/budgets.json` (copy into the adopting repo and tune).
@@ -61,7 +61,7 @@ procedure globs, sentence cap, banned synonyms). Health budgets:
 
 `collect_metrics.py` answers, with evidence:
 
-1. **Is the structure there?** scaffold areas present
+1. **Is the starting structure there?** `docs/` and `docs/standards/` present
 2. **Do the docs pass the rules?** checker errors/warnings
 3. **Do links resolve?** relative markdown link scan
 4. **Is the process real?** % of behavior commits (git log) that also touched

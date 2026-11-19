@@ -5,9 +5,7 @@ description: Use when scaffolding or bootstrapping a docs/ documentation structu
 
 # docs-ops — documentation structure & lifecycle
 
-Maintain one SDLC-aligned `docs/` tree per repo: **SDD → planning → build → QA →
-review**, with decisions, research, changelog, and generated layers handled as
-first-class areas. Reference implementation: `tripcomposer/docs/`.
+Keep documentation proportionate to the project. Start small and create areas, templates, and process records when they serve a real need.
 
 ## Authority order
 
@@ -20,19 +18,17 @@ Never add a second writing guide or structure map to a repo that already has one
 
 | Mode | Trigger signals | Do this |
 |---|---|---|
-| **Scaffold** | "bootstrap docs", "set up docs structure", "new repo documentation" | Run `scripts/scaffold_docs.py <repo-root>`; it creates the tree and seeds missing files from `templates/`, never overwriting content. Then adapt `docs/README.md` and `CONTRIBUTING.md` to the repo. |
+| **Scaffold** | "bootstrap docs", "set up docs structure", "new repo documentation" | Run `scripts/scaffold_docs.py <repo-root>`; it creates the tree and seeds missing files from `templates/`, never overwriting content. Then adapt the index and writing guide. Use `--full` only when the full legacy tree is useful. |
+| **Writing** | "audit writing", "remove AI writing", "make this concise" | Read `references/writing.md`; audit by default and edit only when requested. |
 | **Manage** | "which doc do I update", "docs lifecycle", epic/ADR/spec/plan/changelog questions | Read `references/rules.md` (change-type matrix) and `references/patterns.md` (worked flows: ADR, spec issue → plan → MR, diagram routing, site regeneration). |
 | **Audit** | "docs hygiene", "audit docs", "docs health", review of a docs-heavy MR | Run `scripts/check_docs.py --strict --root <repo>` for rule violations; run `scripts/collect_metrics.py --root <repo>` for a scored health report with budgets (prose, links, changelog coverage, structure, staleness); walk `references/patterns.md` §8; file gaps as issues. |
 
-## Core rules (full text: `references/rules.md`)
+## Core rules
 
-- One home per fact; everything else links to it.
-- Docs travel with code — same MR updates spec/ADR/changelog.
-- Decisions before code — significant choices get an ADR first.
-- Epics get a spec issue + a plan file before implementation.
-- Specs carry a Delivered-vs-Deferred table; they are targets, not claims of shipped state.
-- Prose: imperative, condition-first, active, ≤20 words, no contractions, exact paths, one term per concept, RFC 2119 keywords only on allowlisted pages, BLUF-first.
-- Generated layers (diagrams, sites, C4 output, ER artifacts) are never hand-edited — edit the curated source and regenerate.
+- Keep one home per fact and update affected documentation with the change.
+- Create decisions, specs, plans, and evidence when their value justifies them; follow existing project requirements.
+- Match writing to the reader and register. The writing guide owns project prose rules.
+- Edit generated material at its source and regenerate it.
 
 ## Verify ladder
 
@@ -42,6 +38,7 @@ Never add a second writing guide or structure map to a repo that already has one
 
 ## Files
 
+- `references/writing.md` — audience-aware concise writing and AI-pattern audit.
 - `references/structure.md` — the full area map, per-area contracts, navigation paths, generated-layer table.
 - `references/rules.md` — process principles, change-type matrix, writing rules, hygiene, anti-patterns.
 - `references/enforcement.md` — checker/Vale/structural/CI ladder, regeneration inventory, freshness-guard gotchas (EOL + machine-root redaction).

@@ -20,6 +20,7 @@ def test_rfc_uppercase_outside_allowlist_fails(scaffolded: Path) -> None:
 
 
 def test_rfc_uppercase_inside_allowlist_passes(scaffolded: Path) -> None:
+    (scaffolded / "docs" / "decisions").mkdir()
     (scaffolded / "docs" / "decisions" / "ADR-0001-x.md").write_text(
         "# ADR-0001: x\n\nReleases MUST update the changelog.\n", encoding="utf-8"
     )

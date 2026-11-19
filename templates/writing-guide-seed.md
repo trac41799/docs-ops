@@ -1,32 +1,13 @@
-# Writing Standard (STE profile)
+# Writing guide
 
-This file is the **single home** for prose rules on this project. Templates and
-checkers reference it; do not create a second writing guide.
+Use this guide as the home for project prose rules. Adapt it to the audience and document type.
 
-## Rules
+## Standards and register
 
-- Use the imperative mood. Start each instruction with a verb.
-- Write one instruction per sentence. Do not chain two actions with "and".
-- State the condition first: "If X, do Y." Never bury the condition after the action.
-- Use active voice and name the actor. Use passive only when the actor is unknown.
-- Keep sentences at 20 words or fewer. Explanations may run longer, but open them with the conclusion.
-- Do not use contractions. Write "do not" in full; never shorten it.
-- Name real files and interfaces by exact path. Never paraphrase a symbol name.
-- Keep one term per concept. Use the glossary term; never a synonym.
+- For descriptive documents, use the plain-language principles of ISO 24495-1:2023: identify the reader and purpose, organize information so it is easy to find, and make it clear and usable.
+- For instructions, use imperative verbs and a subset of ASD-STE100 sentence-economy guidance: active voice, one idea per sentence, and conditions before actions when that improves clarity. This profile does not claim full ASD-STE100 conformance.
+- For normative requirements, use uppercase MUST, SHOULD and MAY only where the project permits them, with the meaning defined by RFC 8174.
 
-## RFC 2119 keywords
+## Shared guidance
 
-Use uppercase MUST / SHOULD / MAY **only** on normative pages (this repo's
-allowlist — see `docs-ops.json` → `rfc_allowlist`, typically specs, decisions,
-and this guide). Lowercase forms carry no weight on those pages (RFC 8174).
-Everywhere else write lowercase "must/should/may" or reword the sentence.
-
-## BLUF
-
-Lead every doc and issue body with the conclusion in ≤5 lines, then detail.
-Never open with preamble or history.
-
-## One home per fact
-
-Before adding a table, list, or definition, link to the page that already owns
-it. Duplicated facts drift; links do not.
+Lead with the conclusion or action. Use clear, concrete words and consistent terms. Preserve exact identifiers and paths. State assumptions and uncertainty where they matter. Choose tables, lists or paragraphs to fit the information. Follow any project-specific terminology and sentence limits.
