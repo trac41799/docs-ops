@@ -57,14 +57,7 @@ DEFAULT_BUDGETS = {
     "window_days": 30,
 }
 
-AREAS = [
-    "docs/specs",
-    "docs/plans",
-    "docs/standards",
-    "docs/decisions",
-    "docs/architecture",
-    "docs/qa",
-]
+AREAS = ["docs", "docs/standards"]
 
 
 def git(root: Path, *args: str) -> str:

@@ -7,10 +7,18 @@ def test_scaffold_creates_tree_and_seeds(tmp_path: Path) -> None:
     root = tmp_path / "fresh"
     r = run_script("scaffold_docs.py", str(root), "--project", "Demo")
     assert r.returncode == 0
-    assert (root / "docs" / "specs").is_dir()
-    assert (root / "docs" / "decisions" / "ADR-template.md").is_file() is False  # templates live in docs/templates
-    assert (root / "docs" / "templates" / "ADR-template.md").is_file()
+    assert (root / "docs" / "standards" / "writing-guide.md").is_file()
     assert (root / "docs" / "README.md").read_text(encoding="utf-8").startswith("# Demo")
+    assert not (root / "docs" / "specs").exists()
+    assert not (root / "docs" / "templates").exists()
+
+
+def test_full_scaffold_retains_optional_tree(tmp_path: Path) -> None:
+    root = tmp_path / "full"
+    r = run_script("scaffold_docs.py", str(root), "--full")
+    assert r.returncode == 0
+    assert (root / "docs" / "specs").is_dir()
+    assert (root / "docs" / "templates" / "ADR-template.md").is_file()
     assert (root / "docs" / "changes" / "CHANGELOG.md").is_file()
 
 

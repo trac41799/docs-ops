@@ -1,3 +1,5 @@
+> The workflows and paths below are optional examples for projects that need them. Existing project rules take precedence. The default scaffold creates only an index and writing guide.
+
 # docs/ structure — the SDLC spine
 
 One tree, five phases in order: **SDD → planning → build → QA → review**.

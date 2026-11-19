@@ -1,3 +1,5 @@
+> The workflows and paths below are optional examples for projects that need them. Existing project rules take precedence. The default scaffold creates only an index and writing guide.
+
 # Patterns — worked examples
 
 ## 1. New decision → ADR

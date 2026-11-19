@@ -2,7 +2,7 @@
 """Scaffold or repair an SDLC-aligned docs/ tree. Stdlib only.
 
 Usage:
-    python scaffold_docs.py <repo-root> [--project NAME] [--dry-run] [--repair]
+    python scaffold_docs.py <repo-root> [--project NAME] [--dry-run] [--repair] [--full]
 
 Creates the docs/ directory skeleton and seeds missing files from this skill's
 templates/. Never overwrites a file that already has content (even with
@@ -53,6 +53,7 @@ def main() -> int:
     ap.add_argument("--project", default="Project", help="name used in the README seed")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--repair", action="store_true", help="fill zero-byte placeholder files")
+    ap.add_argument("--full", action="store_true", help="also create the legacy full tree and templates")
     args = ap.parse_args()
 
     root: Path = args.repo_root.resolve()
@@ -71,7 +72,10 @@ def main() -> int:
     skipped: list[str] = []
     failed: list[str] = []
 
-    for rel in DIRS:
+    dirs = DIRS if args.full else ["docs", "docs/standards"]
+    seeds = SEEDS if args.full else SEEDS[:1] + SEEDS[2:3]
+
+    for rel in dirs:
         d = root / rel
         if d.is_dir():
             skipped.append(rel + "/")
@@ -85,7 +89,7 @@ def main() -> int:
         except OSError as exc:
             failed.append(f"{rel}/: {exc}")
 
-    for rel, tmpl, substitute in SEEDS:
+    for rel, tmpl, substitute in seeds:
         target = root / rel
         if target.is_file() and target.stat().st_size > 0:
             skipped.append(rel)
